@@ -1,16 +1,19 @@
 //박소은
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 
 public class JavaStudy07 {
     //중복 없는 랜덤 로또번호 생성후 정렬해 줄 메소드
     public static LinkedList randomNum(int cnt){
-        HashSet set = new HashSet();//랜덤한 로또 번호를 중복없이 저장해 줄 자료구조
+        HashSet <Integer>set = new HashSet();//랜덤한 로또 번호를 중복없이 저장해 줄 자료구조
 
         for (int j = 0; set.size() < 6; j++) {
-            set.add((int)(Math.random()*45)+1); //로또 번호 랜덤 생성
+            while(true){
+                int rand = (int)(Math.random()*45)+1 ;
+                if(!set.contains(rand)){
+                    set.add(rand);
+                    break;
+                }
+            }
         }
         LinkedList list = new LinkedList(set); //정렬을 위해 list에 담아줌
         Collections.sort(list); //Collections.sort로 정렬
@@ -32,42 +35,90 @@ public class JavaStudy07 {
 
         //로또 개수 입력
         System.out.print("로또 개수를 입력해 주세요.(숫자 1 ~ 10):");
-        int cnt = scanner.nextInt();
-        LinkedList arr[] = new LinkedList[cnt]; //set으로 받은 로또 한 개의 6개 번호가 정렬되어 들어갈 배열
+        int lottoCount = scanner.nextInt();
 
-        for(int i=0;i<cnt;i++){
-            System.out.print((char)(i+65)+"\t");
-            LinkedList list = randomNum(cnt);
-            arr[i] = list; //추후에 또 쓰이므로 ArrayList형의 배열 arr에 번호 6개 세트 하나씩 저장
+        int LOTTO_COUNT = 6;
+        int[][] userLotto = new int[lottoCount][LOTTO_COUNT];
+        int[] userLottoCount = new int[lottoCount];
+        int[] winLotto = {0,0,0,0,0,0};
 
-            numPrint(list);
+        Integer[] arrNo = { 1,2,3,4,5,6,7,8,9,10,
+                11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,
+                34,3,5,36,37,38,39,40,41,42,43,44,45};
 
-            System.out.println();
+        Random random = new Random();
+
+        for (int i = 0; i < lottoCount; i++) {
+            ArrayList <Integer> noList = new ArrayList<>(Arrays.asList(arrNo));
+            for (int j = 0; j < LOTTO_COUNT; j++) {
+                int min = 0;
+                int max = noList.size();
+                int index = random.nextInt(max) + min;
+
+                int no = noList.get(index);
+                userLotto[i][j] = no;
+                noList.remove(index);
+            }
         }
-        System.out.println();
+        //정렬
+        for (int i = 0; i < lottoCount; i++) {
+            Arrays.sort(userLotto[i]);
+        }
 
-        //당첨 번호 생성
+        //구매로또 출력
+        for (int i = 0; i < lottoCount; i++) {
+            System.out.print((char)(i + 65)+"\t");
+
+            for (int j = 0; j < LOTTO_COUNT; j++) {
+                if(j > 0){
+                    System.out.print(", ");
+                }
+                System.out.print(String.format("%02d",userLotto[i][j]));
+            } System.out.println();
+        }
         System.out.println("[로또 발표]");
-        LinkedList list1 = randomNum(cnt);
-
         System.out.print("\t");
+        ArrayList <Integer> noList = new ArrayList<>(Arrays.asList(arrNo));
+        for (int j = 0; j < LOTTO_COUNT; j++) {
+            int min = 0;
+            int max = noList.size();
+            int index = random.nextInt(max) + min;
 
-        numPrint(list1);
+            int no = noList.get(index);
+            winLotto[j] = no;
 
-        System.out.println("\n");
+            noList.remove(index);
+        }
+
+        //로또 발표 정렬
+        Arrays.sort(winLotto);
+
+        for (int j = 0; j < LOTTO_COUNT; j++) {
+            if(j > 0){
+                System.out.print(", ");
+            }
+            System.out.print(String.format("%02d",winLotto[j]));
+        } System.out.println("\n");
 
         //당첨확인
         System.out.println("[내 로또 결과]");
-        for (int i = 0; i < cnt; i++) { //로또 갯수만큼 당첨 확인 반복
-            int winCount = 0;
-            System.out.print((char)(i+65)+"\t");
-
-            numPrint(arr[i]);
-
-            for (int j = 0; j < 6; j++) {
-                if(arr[i].contains(list1.get(j))) winCount ++;
+        for (int i = 0; i < lottoCount; i++) {
+            int cnt = 0;
+            System.out.print((char)(i + 65)+"\t");
+            for (int j = 0; j < LOTTO_COUNT; j++) {
+                for (int k = 0; k < LOTTO_COUNT; k++) {
+                    if(userLotto[i][j] == winLotto[k]){
+                        cnt ++;
+                        break;
+                    }
+                }
             }
-            System.out.println(" => "+winCount+"개 일치");
+            for (int j = 0; j < LOTTO_COUNT; j++) {
+                    if(j > 0){
+                        System.out.print(", ");
+                    }
+                    System.out.print(String.format("%02d",userLotto[i][j]));
+            } System.out.println(" => "+cnt+"개 일치");
         }
     }
 }

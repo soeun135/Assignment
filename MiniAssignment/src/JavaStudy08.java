@@ -20,6 +20,8 @@ public class JavaStudy08 {
         System.out.print("연소득을 입력해 주세요.:");
 
         int income = scanner.nextInt();
+
+
         int income2 = income;
         int tempIncome = income;
         int taxStandard[] = {12000000,46000000,88000000,150000000,300000000,500000000,1000000000};

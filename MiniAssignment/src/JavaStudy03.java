@@ -12,16 +12,15 @@ public class JavaStudy03 {
         int time = scanner.nextInt();
 
         System.out.print("국가유공자 여부를 입력해 주세요.(y/n):");
-        char country = scanner.next().charAt(0);
+        String country = scanner.next();
 
         System.out.print("복지카드 여부를 입력해 주세요.(y/n):");
-        char card = scanner.next().charAt(0);
+        String card = scanner.next();
 
         int price = 10000;
-        if(card == 'y' || country == 'y') price = 8000;
-        if(age>=3 && age<13) price = 4000;
-        if(time>17) price = 4000;
         if(age < 3) price = 0;
+        else if(age<13 || time > 17)  price = 4000;
+        else if("y".equalsIgnoreCase(card) || "y".equalsIgnoreCase(country)) price = 8000;
 
         System.out.println("입장료: "+price);
 
