@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 public class TwoPointer_03 {
     public static void main(String args[]) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer();
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
         int N = Integer.parseInt(st.nextToken());
         int M = Integer.parseInt(st.nextToken());
@@ -17,10 +17,23 @@ public class TwoPointer_03 {
         for (int i = 0; i < N; i++) {
             arr[i] = Integer.parseInt(st.nextToken());
         }
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < i; j++) {
 
+        int answer = 0;
+        for (int i = 0; i < N; i++) {
+            int p2 = i;
+            int total = 0;
+
+            while (p2 < N && total < M) {
+                total += arr[p2++];
+
+                if (total == M) {
+                    answer++;
+                    break;
+                } else if (total > M) {
+                    break;
+                }
             }
         }
+        System.out.println(answer);
     }
 }
